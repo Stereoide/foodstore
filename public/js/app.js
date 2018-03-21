@@ -74191,7 +74191,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 var einsteinPrivateKey = Object({"MIX_PUSHER_APP_CLUSTER":"mt1","MIX_PUSHER_APP_KEY":"","NODE_ENV":"development"}).EINSTEIN_VISION_PRIVATE_KEY;
                 var einsteinAccountId = Object({"MIX_PUSHER_APP_CLUSTER":"mt1","MIX_PUSHER_APP_KEY":"","NODE_ENV":"development"}).EINSTEIN_VISION_ACCOUNT_ID;
 
-                console.log(einsteinUrl, einsteinPrivateKey, einsteinAccountId);
+                alert(einsteinUrl);
+                alert(einsteinPrivateKey);
+                alert(einsteinAccountId);
             };
             reader.readAsDataURL(file);
         }
