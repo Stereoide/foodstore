@@ -1,14 +1,8 @@
 <template>
     <div>
         <div class="text-center" v-if="isAddingViaPhoto">
-            <img :src="photo" alt="" style="width:400px; height:300px" v-show="isExaminingPhoto" />
-
-            <div v-show="!isExaminingPhoto">
-                <vue-webcam ref='webcam' v-show="!isExaminingPhoto"></vue-webcam>
-                <br />
-
-                <button type="button" class="btn btn-outline-info" @click="takePhoto">Take Photo</button>
-            </div>
+            <input type="file" capture="camera" accept="image/*" id="cameraInput" name="cameraInput" @change="examinePhoto($event)"><br />
+            <img :src="photo" alt="" border="0" style="height: 300px;" v-show="photo" />
         </div>
 
         <div class="form-group">
@@ -104,10 +98,20 @@
                 delete this.errors[field];
             },
 
-            takePhoto () {
-                this.photo = this.$refs.webcam.getPhoto();
-                this.isExaminingPhoto = true;
-            }
+            examinePhoto(event) {
+                this.createImage(event.target.files[0]);
+            },
+
+            createImage(file) {
+                this.photo = new Image();
+                let reader = new FileReader();
+                let that = this;
+
+                reader.onload = (e) => {
+                    that.photo = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            },
         },
 
         created() {

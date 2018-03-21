@@ -47878,12 +47878,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: [],
@@ -47945,9 +47939,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         clearError: function clearError(field) {
             delete this.errors[field];
         },
-        takePhoto: function takePhoto() {
-            this.photo = this.$refs.webcam.getPhoto();
-            this.isExaminingPhoto = true;
+        examinePhoto: function examinePhoto(event) {
+            this.createImage(event.target.files[0]);
+        },
+        createImage: function createImage(file) {
+            this.photo = new Image();
+            var reader = new FileReader();
+            var that = this;
+
+            reader.onload = function (e) {
+                that.photo = e.target.result;
+            };
+            reader.readAsDataURL(file);
         }
     },
 
@@ -47966,58 +47969,34 @@ var render = function() {
   return _c("div", [
     _vm.isAddingViaPhoto
       ? _c("div", { staticClass: "text-center" }, [
+          _c("input", {
+            attrs: {
+              type: "file",
+              capture: "camera",
+              accept: "image/*",
+              id: "cameraInput",
+              name: "cameraInput"
+            },
+            on: {
+              change: function($event) {
+                _vm.examinePhoto($event)
+              }
+            }
+          }),
+          _c("br"),
+          _vm._v(" "),
           _c("img", {
             directives: [
               {
                 name: "show",
                 rawName: "v-show",
-                value: _vm.isExaminingPhoto,
-                expression: "isExaminingPhoto"
+                value: _vm.photo,
+                expression: "photo"
               }
             ],
-            staticStyle: { width: "400px", height: "300px" },
-            attrs: { src: _vm.photo, alt: "" }
-          }),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: !_vm.isExaminingPhoto,
-                  expression: "!isExaminingPhoto"
-                }
-              ]
-            },
-            [
-              _c("vue-webcam", {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: !_vm.isExaminingPhoto,
-                    expression: "!isExaminingPhoto"
-                  }
-                ],
-                ref: "webcam"
-              }),
-              _vm._v(" "),
-              _c("br"),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-outline-info",
-                  attrs: { type: "button" },
-                  on: { click: _vm.takePhoto }
-                },
-                [_vm._v("Take Photo")]
-              )
-            ],
-            1
-          )
+            staticStyle: { height: "300px" },
+            attrs: { src: _vm.photo, alt: "", border: "0" }
+          })
         ])
       : _vm._e(),
     _vm._v(" "),
