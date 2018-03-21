@@ -114,7 +114,9 @@
                     let einsteinPrivateKey = process.env.EINSTEIN_VISION_PRIVATE_KEY
                     let einsteinAccountId = process.env.EINSTEIN_VISION_ACCOUNT_ID
 
-                    console.log(einsteinUrl, einsteinPrivateKey, einsteinAccountId);
+                    alert(einsteinUrl);
+                    alert(einsteinPrivateKey);
+                    alert(einsteinAccountId);
                 };
                 reader.readAsDataURL(file);
             },
