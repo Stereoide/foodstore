@@ -14,7 +14,13 @@ class IngredientController extends Controller
      */
     public function index()
     {
-        //
+        /* Fetch ingredients */
+
+        $ingredients = Ingredient::available()->orderByName()->get();
+
+        /* Show view */
+
+        return view('pages.ingredients.index')->with(compact('ingredients'));
     }
 
     /**
@@ -24,7 +30,7 @@ class IngredientController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.ingredients.create');
     }
 
     /**
@@ -35,7 +41,7 @@ class IngredientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**

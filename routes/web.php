@@ -11,10 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('ingredients', 'IngredientController');
+
+    Route::get('{any}', function() {
+        return redirect(route('ingredients.index'));
+    })->where('any', '(.*)');
+});

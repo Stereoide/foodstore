@@ -28,12 +28,12 @@ class Ingredient extends Model
         return $query->orWhereNotNull('depleted_at');
     }
 
-    public function scopeOrderedByAmount($query)
+    public function scopeOrderByAmount($query)
     {
         return $query->orderBy('amount');
     }
 
-    public function scopeOrderedByName($query)
+    public function scopeOrderByName($query)
     {
         return $query->orderBy('name');
     }
