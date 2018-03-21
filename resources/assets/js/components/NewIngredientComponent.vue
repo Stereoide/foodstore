@@ -1,7 +1,27 @@
 <template>
     <div>
+        <div class="text-center" v-if="isAddingViaPhoto">
+            <img :src="photo" alt="" style="width:400px; height:300px" v-show="isExaminingPhoto" />
+
+            <div v-show="!isExaminingPhoto">
+                <vue-webcam ref='webcam' v-show="!isExaminingPhoto"></vue-webcam>
+                <br />
+
+                <button type="button" class="btn btn-outline-info" @click="takePhoto">Take Photo</button>
+            </div>
+        </div>
+
         <div class="form-group">
-            <label for="name">New Product</label>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="isAddingViaPhoto" v-model="isAddingViaPhoto">
+                <label class="form-check-label" for="isAddingViaPhoto">
+                    add via photo
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="name">Product name</label>
             <input type="text" class="form-control" id="name" placeholder="Product" v-model="ingredient.name" @focus="clearError('name')">
             <small class="form-text text-muted" v-show="errors.name">The product name must not be empty.</small>
         </div>
@@ -25,6 +45,9 @@
 
         data() {
             return {
+                photo: null,
+                isAddingViaPhoto: false,
+                isExaminingPhoto: false,
                 errors: {},
                 ingredient: {
                     name: '',
@@ -79,6 +102,11 @@
 
             clearError(field) {
                 delete this.errors[field];
+            },
+
+            takePhoto () {
+                this.photo = this.$refs.webcam.getPhoto();
+                this.isExaminingPhoto = true;
             }
         },
 

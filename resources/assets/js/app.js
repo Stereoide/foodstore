@@ -20,6 +20,8 @@ Vue.component('ingredients-list', require('./components/IngredientsListComponent
 Vue.component('ingredient', require('./components/IngredientComponent.vue'));
 Vue.component('new-ingredient', require('./components/NewIngredientComponent.vue'));
 
+import vueWebcam from 'vue-webcam'
+
 const app = new Vue({
     el: '#app'
 });
