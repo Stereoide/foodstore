@@ -109,6 +109,12 @@
 
                 reader.onload = (e) => {
                     that.photo = e.target.result;
+
+                    let einsteinUrl = process.env.EINSTEIN_VISION_URL
+                    let einsteinPrivateKey = process.env.EINSTEIN_VISION_PRIVATE_KEY
+                    let einsteinAccountId = process.env.EINSTEIN_VISION_ACCOUNT_ID
+
+                    console.log(einsteinUrl, einsteinPrivateKey, einsteinAccountId);
                 };
                 reader.readAsDataURL(file);
             },
