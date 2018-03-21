@@ -6,15 +6,14 @@
                     <div class="card-header">Ingredients</div>
 
                     <div class="card-body">
-                        <div v-show="ingredients.length == 0">
-                            No ingredients right now
-                        </div>
-
                         <div>
                             <ul class="list-group">
                                 <li class="list-group-item">
                                     <new-ingredient v-show="isAddingIngredient" @saved="saveNewIngredient" @cancelled="cancelNewIngredient"></new-ingredient>
                                     <span class="btn btn-outline-info" v-show="!isAddingIngredient" @click="isAddingIngredient = true">Add ingredient</span>
+                                </li>
+                                <li class="list-group-item" v-show="ingredients.length == 0">
+                                    No ingredients right now
                                 </li>
                                 <li class="list-group-item" v-for="ingredient in orderedIngredients" :key="ingredient.id">
                                     <ingredient :data-ingredient="ingredient" @depleted="depleteIngredient(ingredient)"></ingredient>

@@ -47420,7 +47420,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['dataIngredients'],
@@ -47481,25 +47480,6 @@ var render = function() {
           _c("div", { staticClass: "card-header" }, [_vm._v("Ingredients")]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
-            _c(
-              "div",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.ingredients.length == 0,
-                    expression: "ingredients.length == 0"
-                  }
-                ]
-              },
-              [
-                _vm._v(
-                  "\n                        No ingredients right now\n                    "
-                )
-              ]
-            ),
-            _vm._v(" "),
             _c("div", [
               _c(
                 "ul",
@@ -47546,6 +47526,26 @@ var render = function() {
                       )
                     ],
                     1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "li",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.ingredients.length == 0,
+                          expression: "ingredients.length == 0"
+                        }
+                      ],
+                      staticClass: "list-group-item"
+                    },
+                    [
+                      _vm._v(
+                        "\n                                No ingredients right now\n                            "
+                      )
+                    ]
                   ),
                   _vm._v(" "),
                   _vm._l(_vm.orderedIngredients, function(ingredient) {
