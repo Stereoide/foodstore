@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Ingredient;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class IngredientController extends Controller
@@ -24,16 +25,6 @@ class IngredientController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('pages.ingredients.create');
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -41,51 +32,37 @@ class IngredientController extends Controller
      */
     public function store(Request $request)
     {
-
+        $ingredient = Ingredient::create($request->all());
+        return $ingredient;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Ingredient  $ingredient
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Ingredient $ingredient)
+    public function stockUp(Ingredient $ingredient)
     {
-        //
+        $ingredient->amount++;
+        $ingredient->save();
+
+        return $ingredient;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Ingredient  $ingredient
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Ingredient $ingredient)
+    public function consume(Ingredient $ingredient)
     {
-        //
+        $ingredient->amount--;
+
+        if ($ingredient->amount < 1) {
+            $ingredient->amount = 0;
+        }
+
+        $ingredient->save();
+
+        return $ingredient;
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Ingredient  $ingredient
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Ingredient $ingredient)
+    public function deplete(Ingredient $ingredient)
     {
-        //
-    }
+        $ingredient->amount = 0;
+        $ingredient->depleted_at = Carbon::now();
+        $ingredient->save();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Ingredient  $ingredient
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Ingredient $ingredient)
-    {
-        //
+        return $ingredient;
     }
 }

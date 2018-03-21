@@ -30,23 +30,41 @@
             },
 
             consume() {
-                this.ingredient.amount--;
+                let that = this;
 
-                if (this.ingredient.amount < 1) {
-                    this.deplete();
-                }
+                axios
+                    .get(route('ingredients.consume', this.ingredient.id))
+                    .then(function(response) {
+                        that.ingredient.amount = response.data.amount;
+
+                        if (that.ingredient.amount < 1) {
+                            that.deplete();
+                        }
+                    });
             },
 
             stockUp() {
-                this.ingredient.amount++;
+                let that = this;
+
+                axios
+                    .get(route('ingredients.stockup', this.ingredient.id))
+                    .then(function(response) {
+                        that.ingredient.amount = response.data.amount;
+                    });
             },
 
             deplete() {
-                this.ingredient.amount = 0;
+                let that = this;
 
-                /* Bubble depletion to the parent component */
+                axios
+                    .get(route('ingredients.deplete', this.ingredient.id))
+                    .then(function(response) {
+                        that.ingredient.amount = response.data.amount;
 
-                this.$emit('depleted');
+                        /* Bubble depletion to the parent component */
+
+                        that.$emit('depleted');
+                    });
             }
         },
 

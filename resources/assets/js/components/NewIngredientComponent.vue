@@ -41,7 +41,10 @@
                 this.checkField('amount');
 
                 if (Object.keys(this.errors).length === 0) {
-                    this.$emit('saved', this.ingredient);
+                    let ingredient = JSON.parse(JSON.stringify(this.ingredient));
+
+                    this.$emit('saved', ingredient);
+                    this.reset();
                 }
             },
 

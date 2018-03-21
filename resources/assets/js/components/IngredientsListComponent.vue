@@ -16,8 +16,8 @@
                                     <new-ingredient v-show="isAddingIngredient" @saved="saveNewIngredient" @cancelled="cancelNewIngredient"></new-ingredient>
                                     <span class="btn btn-outline-info" v-show="!isAddingIngredient" @click="isAddingIngredient = true">Add ingredient</span>
                                 </li>
-                                <li class="list-group-item" v-for="(ingredient, index) in ingredients">
-                                    <ingredient :data-ingredient="ingredient" @depleted="depleteIngredient(index)"></ingredient>
+                                <li class="list-group-item" v-for="ingredient in orderedIngredients" :key="ingredient.id">
+                                    <ingredient :data-ingredient="ingredient" @depleted="depleteIngredient(ingredient)"></ingredient>
                                 </li>
                             </ul>
                         </div>
@@ -39,14 +39,26 @@
             };
         },
 
+        computed: {
+            orderedIngredients() {
+                return this.ingredients.sort((a, b) => a.name > b.name );
+            }
+        },
+
         methods: {
-            depleteIngredient(index) {
-                this.ingredients.splice(index, 1);
+            depleteIngredient(depletedIngredient) {
+                this.ingredients = this.ingredients.filter(ingredient => ingredient.id !== depletedIngredient.id);
             },
 
             saveNewIngredient(ingredient) {
-                this.ingredients.push(ingredient);
-                this.isAddingIngredient = false;
+                let that = this;
+
+                axios
+                    .post(route('ingredients.store'), ingredient)
+                    .then(function(response) {
+                        that.ingredients.push(response.data);
+                        that.isAddingIngredient = false;
+                    });
             },
 
             cancelNewIngredient() {

@@ -14,6 +14,9 @@
 Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('ingredients/{ingredient}/consume', 'IngredientController@consume')->name('ingredients.consume');
+    Route::get('ingredients/{ingredient}/deplete', 'IngredientController@deplete')->name('ingredients.deplete');
+    Route::get('ingredients/{ingredient}/stockup', 'IngredientController@stockUp')->name('ingredients.stockup');
     Route::resource('ingredients', 'IngredientController');
 
     Route::get('{any}', function() {

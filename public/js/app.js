@@ -47433,13 +47433,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
 
+    computed: {
+        orderedIngredients: function orderedIngredients() {
+            return this.ingredients.sort(function (a, b) {
+                return a.name > b.name;
+            });
+        }
+    },
+
     methods: {
-        depleteIngredient: function depleteIngredient(index) {
-            this.ingredients.splice(index, 1);
+        depleteIngredient: function depleteIngredient(depletedIngredient) {
+            this.ingredients = this.ingredients.filter(function (ingredient) {
+                return ingredient.id !== depletedIngredient.id;
+            });
         },
         saveNewIngredient: function saveNewIngredient(ingredient) {
-            this.ingredients.push(ingredient);
-            this.isAddingIngredient = false;
+            var that = this;
+
+            axios.post(route('ingredients.store'), ingredient).then(function (response) {
+                that.ingredients.push(response.data);
+                that.isAddingIngredient = false;
+            });
         },
         cancelNewIngredient: function cancelNewIngredient() {
             this.isAddingIngredient = false;
@@ -47534,16 +47548,16 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _vm._l(_vm.ingredients, function(ingredient, index) {
+                  _vm._l(_vm.orderedIngredients, function(ingredient) {
                     return _c(
                       "li",
-                      { staticClass: "list-group-item" },
+                      { key: ingredient.id, staticClass: "list-group-item" },
                       [
                         _c("ingredient", {
                           attrs: { "data-ingredient": ingredient },
                           on: {
                             depleted: function($event) {
-                              _vm.depleteIngredient(index)
+                              _vm.depleteIngredient(ingredient)
                             }
                           }
                         })
@@ -47656,21 +47670,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.isEditing = !this.isEditing;
         },
         consume: function consume() {
-            this.ingredient.amount--;
+            var that = this;
 
-            if (this.ingredient.amount < 1) {
-                this.deplete();
-            }
+            axios.get(route('ingredients.consume', this.ingredient.id)).then(function (response) {
+                that.ingredient.amount = response.data.amount;
+
+                if (that.ingredient.amount < 1) {
+                    that.deplete();
+                }
+            });
         },
         stockUp: function stockUp() {
-            this.ingredient.amount++;
+            var that = this;
+
+            axios.get(route('ingredients.stockup', this.ingredient.id)).then(function (response) {
+                that.ingredient.amount = response.data.amount;
+            });
         },
         deplete: function deplete() {
-            this.ingredient.amount = 0;
+            var that = this;
 
-            /* Bubble depletion to the parent component */
+            axios.get(route('ingredients.deplete', this.ingredient.id)).then(function (response) {
+                that.ingredient.amount = response.data.amount;
 
-            this.$emit('depleted');
+                /* Bubble depletion to the parent component */
+
+                that.$emit('depleted');
+            });
         }
     },
 
@@ -47866,7 +47892,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.checkField('amount');
 
             if (Object.keys(this.errors).length === 0) {
-                this.$emit('saved', this.ingredient);
+                var ingredient = JSON.parse(JSON.stringify(this.ingredient));
+
+                this.$emit('saved', ingredient);
+                this.reset();
             }
         },
         cancel: function cancel() {
